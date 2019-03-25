@@ -1,0 +1,27 @@
+version: '3.3'
+services:    
+  shortener:
+    build:
+      context: .
+      dockerfile: ./compose/shortener/Dockerfile
+    ports:
+      - 8000:8080
+    networks:
+      - shortener-network
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:5.0
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    networks:
+      - shortener-network
+    volumes:
+      - redis-data:/data
+
+networks:
+  shortener-network:
+
+volumes:
+  redis-data:
